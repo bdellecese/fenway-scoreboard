@@ -68,37 +68,4 @@ async function loadScores() {
     }
 }
 
-loadScores();                game.teams.home.team.league.id === 103
-                ? "american-league"
-                : "national-league";
-
-            const winner =
-                homeScore > awayScore
-                ? `${homeCode} ${homeScore} - ${awayCode} ${awayScore}`
-                : `${awayCode} ${awayScore} - ${homeCode} ${homeScore}`;
-
-            document.getElementById(league).innerHTML += `
-                <div class="game">
-                    ${awayCode}
-                    ${awayScore}
-                    -
-                    ${homeCode}
-                    ${homeScore}
-                    FINAL
-                </div>
-            `;
-
-        });
-
-    } catch(error) {
-
-        console.error(
-            "Unable to load MLB scores:",
-            error
-        );
-
-    }
-}
-
-
 loadScores();
