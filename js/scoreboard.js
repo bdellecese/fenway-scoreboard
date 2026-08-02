@@ -15,6 +15,9 @@ async function loadScores() {
 
         const games = data.dates[0]?.games || [];
 
+        console.log(games);
+        console.log(games[0]);
+
         games.forEach(game => {
 
             if (game.status.abstractGameState !== "Final") {
