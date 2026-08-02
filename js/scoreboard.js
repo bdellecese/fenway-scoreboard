@@ -1,71 +1,23 @@
-// Fenway Scoreboard - Version 1
-// Displays yesterday's MLB final scores
-
-async function loadScores() {
-    const americanLeague = document.getElementById("american-league");
-    const nationalLeague = document.getElementById("national-league");
-
-    // Clear any existing content
-    americanLeague.innerHTML = "";
-    nationalLeague.innerHTML = "";
-
-    // Yesterday's date
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    const date = yesterday.toISOString().split("T")[0];
-
-    const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${date}`;
-
-    try {
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (!data.dates || data.dates.length === 0) {
-            americanLeague.innerHTML =
-                "<div class='game'>No games found.</div>";
-            return;
-        }
-
-        const games = data.dates[0].games;
-
-        games.forEach(game => {
-
-            if (game.status.abstractGameState !== "Final") {
-                return;
-            }
-
-            const away = game.teams.away;
-            const home = game.teams.home;
-
-            const gameHtml = `
-                <div class="game">
-                    ${away.team.abbreviation} ${away.score}
-                    &nbsp;&nbsp;&nbsp;
-                    ${home.team.abbreviation} ${home.score}
-                    &nbsp;&nbsp;FINAL
-                </div>
-            `;
-
-            // For now, place everything in the left column.
-            // We'll split AL/NL in Version 2.
-            americanLeague.innerHTML += gameHtml;
-        });
-
-    } catch (err) {
-        console.error(err);
-
-        americanLeague.innerHTML = `
-            <div class="game">
-                Unable to load MLB scores.
-            </div>
-        `;
-    }
+async function loadScores(){
+const el=document.getElementById("games");
+el.innerHTML="Loading...";
+const d=new Date(); d.setDate(d.getDate()-1);
+const date=d.toISOString().split("T")[0];
+try{
+ const r=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${date}`);
+ const data=await r.json();
+ el.innerHTML="";
+ const games=(data.dates&&data.dates[0])?data.dates[0].games:[];
+ games.filter(g=>g.status.abstractGameState==="Final").forEach(g=>{
+   const div=document.createElement("div");
+   div.className="game";
+   div.textContent=`${g.teams.away.team.abbreviation} ${g.teams.away.score}   ${g.teams.home.team.abbreviation} ${g.teams.home.score}   FINAL`;
+   el.appendChild(div);
+ });
+ if(!games.length) el.textContent="No games found.";
+}catch(e){
+ console.error(e);
+ el.textContent="Error loading scores.";
 }
-
+}
 loadScores();
