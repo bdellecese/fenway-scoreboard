@@ -10,7 +10,9 @@ async function loadScores() {
     const response = await fetch(url);
     const data = await response.json();
 
-    console.log(data);
+//    console.log(data);
+    console.log(data.dates[0].games[0].teams.away.team);
+    console.log(data.dates[0].games[0].teams.home.team);
 
 }
 
