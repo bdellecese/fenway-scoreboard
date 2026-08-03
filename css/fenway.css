@@ -331,23 +331,9 @@ h1 {
 #featured-game {
 
     width: 100%;
-
-    margin-bottom: 12px;
-
+    margin-bottom: 8px;
     padding-bottom: 8px;
-
     border-bottom: 2px solid var(--cream);
-
-}
-
-
-.featured-header {
-
-    font-size: 22px;
-
-    letter-spacing: 4px;
-
-    margin-bottom: 6px;
 
 }
 
