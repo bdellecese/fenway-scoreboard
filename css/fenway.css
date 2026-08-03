@@ -316,17 +316,34 @@ h1 {
 
 }
 
-/* Featured Red Sox Game */
+/* Featured Games */
 
-#featured-game {
+.featured-games {
 
-    width: 100%;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--cream);
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    column-gap: 48px;
+
+    margin-bottom: 18px;
+
+    align-items: start;
 
 }
 
+
+/* Individual featured game */
+
+#featured-left,
+#featured-right {
+
+    width: 100%;
+
+}
+
+
+/* Box Score */
 
 .box-score {
 
@@ -335,42 +352,54 @@ h1 {
 }
 
 
+/* Inning grid */
+
 .inning-header,
 .inning-row {
 
     display: grid;
 
     grid-template-columns:
-        90px
+        60px
         repeat(9, 1fr)
-        70px
-        70px
-        70px;
+        55px
+        55px
+        55px;
 
     align-items: center;
 
 }
 
 
+/* Inning header */
+
 .inning-header {
 
-    font-size: 18px;
+    font-size: 16px;
 
     color: var(--muted);
 
     letter-spacing: 2px;
 
+    margin-bottom: 4px;
+
 }
 
+
+/* Team rows */
 
 .inning-row {
 
-    font-size: 26px;
+    font-size: 24px;
 
     letter-spacing: 1px;
 
+    padding: 3px 0;
+
 }
 
+
+/* Center inning numbers */
 
 .inning-row span:not(:first-child),
 .inning-header span:not(:first-child) {
@@ -380,14 +409,51 @@ h1 {
 }
 
 
+/* WP / LP / SV */
+
 .decisions {
 
-    margin-top: 6px;
+    margin-top: 8px;
 
-    font-size: 16px;
+    font-size: 15px;
 
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 
     color: var(--muted);
+
+}
+
+
+/* Responsive */
+
+@media (max-width: 1400px) {
+
+
+    .featured-games {
+
+        column-gap: 28px;
+
+    }
+
+
+    .inning-row {
+
+        font-size: 22px;
+
+    }
+
+
+}
+
+
+@media (max-width: 900px) {
+
+
+    .featured-games {
+
+        grid-template-columns: 1fr;
+
+    }
+
 
 }
