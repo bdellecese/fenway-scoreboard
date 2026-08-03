@@ -112,12 +112,6 @@ async function loadRedSoxGame() {
 
         container.innerHTML = `
 
-
-            <div class="featured-header">
-                RED SOX GAME
-            </div>
-
-
             <div class="box-score">
 
 
