@@ -44,14 +44,30 @@ async function loadScores() {
             const div = document.createElement("div");
             div.className = "game";
 
-            div.innerHTML =
-                `${awayCode} ${away.score} &nbsp;&nbsp;&nbsp; ` +
-                `${homeCode} ${home.score} &nbsp;&nbsp; FINAL`;
+            div.innerHTML = `
+                <span class="team ${awayCode === "BOS" ? "redsox" : ""}">${awayCode}</span>
+                <span class="score">${away.score}</span>
+                
+                <span class="final">@</span>
+                
+                <span class="team ${homeCode === "BOS" ? "redsox" : ""}">${homeCode}</span>
+                <span class="score">${home.score}</span>
+                
+            `;
 
-            if (awayCode === "BOS" || homeCode === "BOS") {
-                div.style.fontWeight = "bold";
-                div.style.color = "#FFD700";
-            }
+
+
+
+
+            
+            //div.innerHTML =
+            //    `${awayCode} ${away.score} &nbsp;&nbsp;&nbsp; ` +
+            //    `${homeCode} ${home.score} &nbsp;&nbsp; FINAL`;
+
+            //if (awayCode === "BOS" || homeCode === "BOS") {
+            //    div.style.fontWeight = "bold";
+            //    div.style.color = "#FFD700";
+           // }
 
             container.appendChild(div);
 
