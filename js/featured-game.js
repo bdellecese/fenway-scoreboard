@@ -1,6 +1,12 @@
-async function loadRedSoxGame() {
+async function loadFeaturedGame(teamId, containerId) {
 
-    const container = document.getElementById("featured-game");
+    const container = document.getElementById(containerId);
+
+    if (!container) {
+        console.error(`Missing container: ${containerId}`);
+        return;
+    }
+
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -10,173 +16,113 @@ async function loadRedSoxGame() {
 
     try {
 
-        // Find Red Sox game
+        // Find the team's game
         const scheduleResponse = await fetch(
             `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${apiDate}`
         );
+
 
         const scheduleData = await scheduleResponse.json();
 
 
         if (!scheduleData.dates.length) {
-            container.innerHTML = "NO RED SOX GAME";
+
+            container.innerHTML = "NO GAME";
             return;
+
         }
 
 
         const games = scheduleData.dates[0].games;
 
 
-        const redSoxGame = games.find(game =>
-            game.teams.home.team.id === 111 ||
-            game.teams.away.team.id === 111
+        const featuredGame = games.find(game =>
+            game.teams.home.team.id === teamId ||
+            game.teams.away.team.id === teamId
         );
 
 
-        if (!redSoxGame) {
-            container.innerHTML = "NO RED SOX GAME";
+        if (!featuredGame) {
+
+            container.innerHTML = "NO GAME";
             return;
+
         }
 
 
+        console.log(
+            "Featured game loaded:",
+            teamId,
+            featuredGame.gamePk
+        );
 
-        // Get live feed
+
+        // Get detailed game feed
         const feedResponse = await fetch(
-            `https://statsapi.mlb.com/api/v1.1/game/${redSoxGame.gamePk}/feed/live`
+            `https://statsapi.mlb.com/api/v1.1/game/${featuredGame.gamePk}/feed/live`
         );
 
 
         const feed = await feedResponse.json();
 
 
-        const linescore = feed.liveData.linescore;
-
         const awayTeam = feed.gameData.teams.away;
         const homeTeam = feed.gameData.teams.home;
 
-
-
-        function teamCode(team) {
-            return TEAM_ABBR[team.id] || team.name;
-        }
+        const linescore = feed.liveData.linescore;
 
 
 
-        function renderInnings(teamSide) {
+        const awayCode =
+            TEAM_ABBR[awayTeam.id] || awayTeam.name;
 
-            return linescore.innings.map(inning => {
-
-                return `
-                    <span>
-                        ${inning[teamSide]?.runs ?? "-"}
-                    </span>
-                `;
-
-            }).join("");
-
-        }
-
-
-
-        let decisions = "";
-
-
-        if (feed.liveData.decisions) {
-
-            const d = feed.liveData.decisions;
-
-
-            decisions = `
-
-                <div class="decisions">
-
-                    ${d.winner
-                        ? `WP: ${d.winner.fullName}`
-                        : ""}
-
-                    ${d.loser
-                        ? `&nbsp;&nbsp;&nbsp;LP: ${d.loser.fullName}`
-                        : ""}
-
-                    ${d.save
-                        ? `&nbsp;&nbsp;&nbsp;SV: ${d.save.fullName}`
-                        : ""}
-
-                </div>
-
-            `;
-
-        }
+        const homeCode =
+            TEAM_ABBR[homeTeam.id] || homeTeam.name;
 
 
 
         container.innerHTML = `
 
-            <div class="box-score">
+            <div class="featured-placeholder">
 
-
-                <div class="inning-header">
-
-                    <span></span>
-
-                    ${linescore.innings.map(inning =>
-                        `<span>${inning.num}</span>`
-                    ).join("")}
-
-                    <span>R</span>
-                    <span>H</span>
-                    <span>E</span>
-
+                <div>
+                    ${awayCode}
+                    ${linescore.teams.away.runs}
                 </div>
 
-
-
-                <div class="inning-row">
-
-                    <span>${teamCode(awayTeam)}</span>
-
-                    ${renderInnings("away")}
-
-                    <span>${linescore.teams.away.runs}</span>
-                    <span>${linescore.teams.away.hits}</span>
-                    <span>${linescore.teams.away.errors}</span>
-
+                <div>
+                    ${homeCode}
+                    ${linescore.teams.home.runs}
                 </div>
-
-
-
-                <div class="inning-row">
-
-                    <span>${teamCode(homeTeam)}</span>
-
-                    ${renderInnings("home")}
-
-                    <span>${linescore.teams.home.runs}</span>
-                    <span>${linescore.teams.home.hits}</span>
-                    <span>${linescore.teams.home.errors}</span>
-
-                </div>
-
 
             </div>
-
-
-            ${decisions}
-
 
         `;
 
 
     } catch (err) {
 
-        console.error(err);
+        console.error(
+            "Unable to load featured game:",
+            err
+        );
 
-        container.innerHTML = "Unable to load Red Sox game.";
+        container.innerHTML = "ERROR";
 
     }
 
 }
 
 
+// Load configured featured games
 
-loadRedSoxGame();
+loadFeaturedGame(
+    SCOREBOARD_CONFIG.featuredGames.left,
+    "featured-left"
+);
+
+
+loadFeaturedGame(
+    SCOREBOARD_CONFIG.featuredGames.right,
+    "featured-right"
+);
