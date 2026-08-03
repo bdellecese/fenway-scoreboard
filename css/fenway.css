@@ -183,12 +183,9 @@ h1 {
 
 .team {
 
-    font-size: 30px;
-
+    font-size: 26px;
     font-weight: 400;
-
-    letter-spacing: 3px;
-
+    letter-spacing: 1px;
     text-transform: uppercase;
 
 }
@@ -198,14 +195,10 @@ h1 {
 
 .score {
 
-    font-size: 38px;
-
-    font-weight: 600;
-
+    font-size: 26px;
+    font-weight: 400;
     text-align: right;
-
     letter-spacing: 1px;
-
     font-variant-numeric: tabular-nums;
 
 }
@@ -216,13 +209,9 @@ h1 {
 .final {
 
     font-size: 15px;
-
     letter-spacing: 2px;
-
     color: var(--muted);
-
     text-align: center;
-
     margin-left: 8px;
 
 }
