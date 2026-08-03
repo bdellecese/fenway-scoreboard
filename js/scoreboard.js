@@ -31,6 +31,7 @@ const TEAM_ABBR = {
     158: "MIL"
 };
 
+
 const AL_TEAMS = new Set([
     "LAA",
     "BAL",
@@ -49,19 +50,18 @@ const AL_TEAMS = new Set([
     "TOR"
 ]);
 
-function getLeague(team) {
-
-    const code = getTeamCode(team);
-
-    return AL_TEAMS.has(code)
-        ? "American League"
-        : "National League";
-
-}
-
 
 function getTeamCode(team) {
     return TEAM_ABBR[team.id] || team.name;
+}
+
+
+function getLeague(team) {
+
+    return AL_TEAMS.has(getTeamCode(team))
+        ? "American League"
+        : "National League";
+
 }
 
 
@@ -70,9 +70,11 @@ function sortGames(a, b) {
     const aHome = getTeamCode(a.teams.home.team);
     const bHome = getTeamCode(b.teams.home.team);
 
+
     // Red Sox always first
     if (aHome === "BOS") return -1;
     if (bHome === "BOS") return 1;
+
 
     // Then alphabetical by home team
     return aHome.localeCompare(bHome);
@@ -80,10 +82,25 @@ function sortGames(a, b) {
 }
 
 
+
+function splitIntoColumns(games) {
+
+    const midpoint = Math.ceil(games.length / 2);
+
+    return [
+        games.slice(0, midpoint),
+        games.slice(midpoint)
+    ];
+
+}
+
+
+
 function createGame(game) {
 
     const away = game.teams.away;
     const home = game.teams.home;
+
 
     const card = document.createElement("div");
     card.className = "game";
@@ -136,10 +153,54 @@ function createGame(game) {
 }
 
 
+
+function createLeagueGroup(title, games) {
+
+    const header = document.createElement("div");
+    header.className = "league-header";
+    header.textContent = title;
+
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "league-games";
+
+
+    const columns = splitIntoColumns(games);
+
+
+    columns.forEach(columnGames => {
+
+        const column = document.createElement("div");
+        column.className = "game-column";
+
+
+        columnGames.forEach(game => {
+
+            column.appendChild(createGame(game));
+
+        });
+
+
+        wrapper.appendChild(column);
+
+    });
+
+
+
+    return {
+        header,
+        wrapper
+    };
+
+}
+
+
+
 async function loadScores() {
 
     const gamesContainer = document.getElementById("games");
     const dateElement = document.getElementById("score-date");
+
 
     gamesContainer.innerHTML = "Loading...";
 
@@ -181,62 +242,48 @@ async function loadScores() {
         }
 
 
+
         const games = data.dates[0].games
-            .filter(game => game.status.abstractGameState === "Final");
+            .filter(game =>
+                game.status.abstractGameState === "Final"
+            );
 
 
 
         const americanLeague = games
             .filter(game =>
                 getLeague(game.teams.home.team) === "American League"
-                   )
+            )
             .sort(sortGames);
-        
+
+
+
         const nationalLeague = games
             .filter(game =>
                 getLeague(game.teams.home.team) === "National League"
-                   )
+            )
             .sort(sortGames);
 
 
-        const alColumn = document.createElement("section");
-        alColumn.className = "league-column";
+
+        const al = createLeagueGroup(
+            "AMERICAN LEAGUE",
+            americanLeague
+        );
 
 
-        const nlColumn = document.createElement("section");
-        nlColumn.className = "league-column";
-
-
-
-        const alHeader = document.createElement("div");
-        alHeader.className = "league-header";
-        alHeader.textContent = "AMERICAN LEAGUE";
-
-
-        const nlHeader = document.createElement("div");
-        nlHeader.className = "league-header";
-        nlHeader.textContent = "NATIONAL LEAGUE";
+        const nl = createLeagueGroup(
+            "NATIONAL LEAGUE",
+            nationalLeague
+        );
 
 
 
-        alColumn.appendChild(alHeader);
-        nlColumn.appendChild(nlHeader);
+        gamesContainer.appendChild(al.header);
+        gamesContainer.appendChild(nl.header);
 
-
-
-        americanLeague.forEach(game => {
-            alColumn.appendChild(createGame(game));
-        });
-
-
-        nationalLeague.forEach(game => {
-            nlColumn.appendChild(createGame(game));
-        });
-
-
-
-        gamesContainer.appendChild(alColumn);
-        gamesContainer.appendChild(nlColumn);
+        gamesContainer.appendChild(al.wrapper);
+        gamesContainer.appendChild(nl.wrapper);
 
 
 
