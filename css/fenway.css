@@ -325,3 +325,93 @@ h1 {
     }
 
 }
+
+/* Featured Red Sox Game */
+
+#featured-game {
+
+    width: 100%;
+
+    margin-bottom: 24px;
+
+    padding-bottom: 18px;
+
+    border-bottom: 2px solid var(--cream);
+
+}
+
+
+.featured-header {
+
+    font-size: 26px;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.box-score {
+
+    width: 100%;
+
+}
+
+
+.inning-header,
+.inning-row {
+
+    display: grid;
+
+    grid-template-columns:
+        90px
+        repeat(9, 1fr)
+        70px
+        70px
+        70px;
+
+    align-items: center;
+
+}
+
+
+.inning-header {
+
+    font-size: 22px;
+
+    color: var(--muted);
+
+    letter-spacing: 3px;
+
+}
+
+
+.inning-row {
+
+    font-size: 32px;
+
+    letter-spacing: 2px;
+
+}
+
+
+.inning-row span:not(:first-child),
+.inning-header span:not(:first-child) {
+
+    text-align: center;
+
+}
+
+
+.decisions {
+
+    margin-top: 14px;
+
+    font-size: 20px;
+
+    letter-spacing: 3px;
+
+    color: var(--muted);
+
+}
