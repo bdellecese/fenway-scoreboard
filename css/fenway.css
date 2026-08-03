@@ -332,9 +332,9 @@ h1 {
 
     width: 100%;
 
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 
-    padding-bottom: 18px;
+    padding-bottom: 8px;
 
     border-bottom: 2px solid var(--cream);
 
@@ -343,11 +343,11 @@ h1 {
 
 .featured-header {
 
-    font-size: 26px;
+    font-size: 22px;
 
-    letter-spacing: 5px;
+    letter-spacing: 4px;
 
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 
 }
 
@@ -378,20 +378,20 @@ h1 {
 
 .inning-header {
 
-    font-size: 22px;
+    font-size: 18px;
 
     color: var(--muted);
 
-    letter-spacing: 3px;
+    letter-spacing: 2px;
 
 }
 
 
 .inning-row {
 
-    font-size: 32px;
+    font-size: 26px;
 
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 
 }
 
@@ -406,11 +406,11 @@ h1 {
 
 .decisions {
 
-    margin-top: 14px;
+    margin-top: 6px;
 
-    font-size: 20px;
+    font-size: 16px;
 
-    letter-spacing: 3px;
+    letter-spacing: 2px;
 
     color: var(--muted);
 
