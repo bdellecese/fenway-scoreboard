@@ -31,6 +31,34 @@ const TEAM_ABBR = {
     158: "MIL"
 };
 
+const AL_TEAMS = new Set([
+    "LAA",
+    "BAL",
+    "BOS",
+    "CWS",
+    "CLE",
+    "DET",
+    "HOU",
+    "KC",
+    "MIN",
+    "NYY",
+    "ATH",
+    "SEA",
+    "TB",
+    "TEX",
+    "TOR"
+]);
+
+function getLeague(team) {
+
+    const code = getTeamCode(team);
+
+    return AL_TEAMS.has(code)
+        ? "American League"
+        : "National League";
+
+}
+
 
 function getTeamCode(team) {
     return TEAM_ABBR[team.id] || team.name;
@@ -160,18 +188,15 @@ async function loadScores() {
 
         const americanLeague = games
             .filter(game =>
-                game.teams.home.team.league.name === "American League"
-            )
+                getLeague(game.teams.home.team) === "American League"
+                   )
             .sort(sortGames);
-
-
-
+        
         const nationalLeague = games
             .filter(game =>
-                game.teams.home.team.league.name === "National League"
-            )
+                getLeague(game.teams.home.team) === "National League"
+                   )
             .sort(sortGames);
-
 
 
         const alColumn = document.createElement("section");
