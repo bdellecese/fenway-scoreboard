@@ -109,10 +109,16 @@ async function loadFeaturedGame(teamId, containerId) {
                 if (play.result.event !== "Home Run") {
                     return;
                 }
+
+
+                console.log(
+                    "Play info:",
+                    play
+                );
                 
                 const batter =
                     play.matchup.batter.fullName;
-                
+
                 const description =
                     play.result.description;
                 const match =
