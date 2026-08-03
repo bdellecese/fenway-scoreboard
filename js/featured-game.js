@@ -16,7 +16,6 @@ async function loadFeaturedGame(teamId, containerId) {
 
     try {
 
-        // Find the team's game
         const scheduleResponse = await fetch(
             `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${apiDate}`
         );
@@ -25,10 +24,8 @@ async function loadFeaturedGame(teamId, containerId) {
 
 
         if (!scheduleData.dates.length) {
-
             container.innerHTML = "NO GAME";
             return;
-
         }
 
 
@@ -42,10 +39,8 @@ async function loadFeaturedGame(teamId, containerId) {
 
 
         if (!featuredGame) {
-
             container.innerHTML = "NO GAME";
             return;
-
         }
 
 
@@ -56,8 +51,6 @@ async function loadFeaturedGame(teamId, containerId) {
         );
 
 
-
-        // Load detailed feed
         const feedResponse = await fetch(
             `https://statsapi.mlb.com/api/v1.1/game/${featuredGame.gamePk}/feed/live`
         );
@@ -71,7 +64,6 @@ async function loadFeaturedGame(teamId, containerId) {
 
         const awayTeam = feed.gameData.teams.away;
         const homeTeam = feed.gameData.teams.home;
-
 
 
         const awayCode =
@@ -111,35 +103,78 @@ async function loadFeaturedGame(teamId, containerId) {
 
 
 
-        function getPitcherRecord(playerId) {
+        async function getPitcherRecord(playerId) {
 
-            const teams =
-                feed.liveData.boxscore.teams;
+            try {
 
-
-            for (const side of ["away", "home"]) {
-
-                const players = teams[side].players;
+                const response = await fetch(
+                    `https://statsapi.mlb.com/api/v1/people/${playerId}/stats?stats=season&group=pitching&season=2026`
+                );
 
 
-                const player =
-                    players[`ID${playerId}`];
+                const data = await response.json();
 
 
-                if (player?.stats?.pitching) {
-
-                    const pitching =
-                        player.stats.pitching;
+                const splits =
+                    data.stats?.[0]?.splits;
 
 
-                    return `${pitching.wins}-${pitching.losses}`;
+                if (!splits || splits.length === 0) {
+                    return "";
+                }
+
+
+                const pitching =
+                    splits[0].stat;
+
+
+                console.log(
+                    "Pitcher season stats:",
+                    playerId,
+                    pitching
+                );
+
+
+                let record = "";
+
+
+                if (
+                    pitching.wins !== undefined &&
+                    pitching.losses !== undefined
+                ) {
+
+                    record =
+                        `${pitching.wins}-${pitching.losses}`;
 
                 }
 
+
+                if (
+                    pitching.saves !== undefined &&
+                    pitching.saves > 0
+                ) {
+
+                    record +=
+                        record
+                            ? `, ${pitching.saves} SV`
+                            : `${pitching.saves} SV`;
+
+                }
+
+
+                return record;
+
+
+            } catch (err) {
+
+                console.error(
+                    "Unable to load pitcher record:",
+                    err
+                );
+
+                return "";
+
             }
-
-
-            return "";
 
         }
 
@@ -160,7 +195,8 @@ async function loadFeaturedGame(teamId, containerId) {
             if (decisions.winner) {
 
                 const record =
-                    getPitcherRecord(decisions.winner.id);
+                    await getPitcherRecord(decisions.winner.id);
+
 
                 lines.push(
                     `WP ${decisions.winner.fullName}${record ? ` (${record})` : ""}`
@@ -172,7 +208,8 @@ async function loadFeaturedGame(teamId, containerId) {
             if (decisions.loser) {
 
                 const record =
-                    getPitcherRecord(decisions.loser.id);
+                    await getPitcherRecord(decisions.loser.id);
+
 
                 lines.push(
                     `LP ${decisions.loser.fullName}${record ? ` (${record})` : ""}`
@@ -184,7 +221,8 @@ async function loadFeaturedGame(teamId, containerId) {
             if (decisions.save) {
 
                 const record =
-                    getPitcherRecord(decisions.save.id);
+                    await getPitcherRecord(decisions.save.id);
+
 
                 lines.push(
                     `SV ${decisions.save.fullName}${record ? ` (${record})` : ""}`
@@ -193,14 +231,14 @@ async function loadFeaturedGame(teamId, containerId) {
             }
 
 
-            pitchingLine = lines.join("&nbsp;&nbsp;&nbsp;");
+            pitchingLine =
+                lines.join("&nbsp;&nbsp;&nbsp;");
 
         }
 
 
 
         container.innerHTML = `
-
 
             <div class="box-score">
 
@@ -256,7 +294,6 @@ async function loadFeaturedGame(teamId, containerId) {
                 ${pitchingLine}
 
             </div>
-
 
         `;
 
