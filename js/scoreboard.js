@@ -1,73 +1,39 @@
-// Fenway Scoreboard v1
-
 const TEAM_ABBR = {
-    108: "LAA",
-    109: "ARI",
-    110: "BAL",
-    111: "BOS",
-    112: "CHC",
-    113: "CIN",
-    114: "CLE",
-    115: "COL",
-    116: "DET",
-    117: "HOU",
-    118: "KC",
-    119: "LAD",
-    120: "WSH",
-    121: "NYM",
-    133: "ATH",
-    134: "PIT",
-    135: "SD",
-    136: "SEA",
-    137: "SF",
-    138: "STL",
-    139: "TB",
-    140: "TEX",
-    141: "TOR",
-    142: "MIN",
-    143: "PHI",
-    144: "ATL",
-    145: "CWS",
-    146: "MIA",
-    147: "NYY",
-    158: "MIL"
+    108:"LAA",109:"ARI",110:"BAL",111:"BOS",112:"CHC",113:"CIN",
+    114:"CLE",115:"COL",116:"DET",117:"HOU",118:"KC",119:"LAD",
+    120:"WSH",121:"NYM",133:"ATH",134:"PIT",135:"SD",136:"SEA",
+    137:"SF",138:"STL",139:"TB",140:"TEX",141:"TOR",142:"MIN",
+    143:"PHI",144:"ATL",145:"CWS",146:"MIA",147:"NYY",158:"MIL"
 };
 
 async function loadScores() {
 
-    const container = document.getElementById("american-league");
-
-    container.innerHTML = "";
+    const container = document.getElementById("games");
+    container.innerHTML = "Loading yesterday's games...";
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
     const date = yesterday.toISOString().split("T")[0];
 
-    const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${date}`;
-
     try {
 
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
+        const response = await fetch(
+            `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${date}`
+        );
 
         const data = await response.json();
 
-        if (!data.dates || data.dates.length === 0) {
+        container.innerHTML = "";
+
+        if (!data.dates.length) {
             container.innerHTML = "<div class='game'>No games found.</div>";
             return;
         }
 
-        const games = data.dates[0].games;
+        data.dates[0].games.forEach(game => {
 
-        games.forEach(game => {
-
-            if (game.status.abstractGameState !== "Final") {
-                return;
-            }
+            if (game.status.abstractGameState !== "Final") return;
 
             const away = game.teams.away;
             const home = game.teams.home;
@@ -78,16 +44,13 @@ async function loadScores() {
             const div = document.createElement("div");
             div.className = "game";
 
-            div.innerHTML = `
-                ${awayCode}&nbsp;&nbsp;${away.score}
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                ${homeCode}&nbsp;&nbsp;${home.score}
-                &nbsp;&nbsp;&nbsp;&nbsp;FINAL
-            `;
+            div.innerHTML =
+                `${awayCode} ${away.score} &nbsp;&nbsp;&nbsp; ` +
+                `${homeCode} ${home.score} &nbsp;&nbsp; FINAL`;
 
-            // Highlight the Red Sox
             if (awayCode === "BOS" || homeCode === "BOS") {
                 div.style.fontWeight = "bold";
+                div.style.color = "#FFD700";
             }
 
             container.appendChild(div);
@@ -98,8 +61,7 @@ async function loadScores() {
 
         console.error(err);
 
-        container.innerHTML =
-            "<div class='game'>Unable to load scores.</div>";
+        container.innerHTML = "<div class='game'>Error loading scores.</div>";
     }
 
 }
