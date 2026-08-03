@@ -325,6 +325,12 @@ async function loadFeaturedGame(teamId, containerId) {
 
             </div>
 
+            ${homeRuns.length ? `
+            <div class="home-runs">
+            HR&nbsp;&nbsp;${homeRuns.join(", ")}
+            </div>
+            ` : ""}
+
         `;
 
 
