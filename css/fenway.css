@@ -89,7 +89,8 @@ h1 {
 
     grid-template-columns: repeat(4, 1fr);
 
-    column-gap: 42px;
+    column-gap: 36px;
+    row-gap: 8px;
 
     align-items: start;
 
