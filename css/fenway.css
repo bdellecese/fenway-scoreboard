@@ -399,12 +399,36 @@ h1 {
 }
 
 
-/* Center inning numbers */
+/* Center inning numbers and totals */
 
 .inning-row span:not(:first-child),
 .inning-header span:not(:first-child) {
 
     text-align: center;
+
+}
+
+
+/* Divider between innings and R/H/E */
+
+.inning-header span:nth-last-child(3),
+.inning-row span:nth-last-child(3) {
+
+    border-left: 2px solid var(--cream);
+
+    padding-left: 18px;
+
+    margin-left: 12px;
+
+}
+
+
+/* Add a little breathing room to H/E */
+
+.inning-header span:nth-last-child(-n+2),
+.inning-row span:nth-last-child(-n+2) {
+
+    padding-left: 8px;
 
 }
 
@@ -420,40 +444,5 @@ h1 {
     letter-spacing: 1.5px;
 
     color: var(--muted);
-
-}
-
-
-/* Responsive */
-
-@media (max-width: 1400px) {
-
-
-    .featured-games {
-
-        column-gap: 28px;
-
-    }
-
-
-    .inning-row {
-
-        font-size: 22px;
-
-    }
-
-
-}
-
-
-@media (max-width: 900px) {
-
-
-    .featured-games {
-
-        grid-template-columns: 1fr;
-
-    }
-
 
 }
