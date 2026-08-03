@@ -101,7 +101,32 @@ async function loadFeaturedGame(teamId, containerId) {
 
         }
 
+        function renderHomeRuns(allPlays) {
+            const homers = [];
 
+            allPlays.forEach(play => {
+
+                if (play.result.event !== "Home Run") {
+                    return;
+                }
+                
+                const batter =
+                    play.matchup.batter.fullName;
+                
+                const description =
+                    play.result.description;
+                const match =
+                    description.match(/\((\d+)\)/);
+                const total =
+                    match ? match[1] : "?";
+
+                homers.push(
+                    `${batter} (${total})`
+                );
+            });
+            
+            return homers;
+        }
 
         async function getPitcherRecord(playerId) {
 
@@ -185,6 +210,11 @@ async function loadFeaturedGame(teamId, containerId) {
 
         const decisions =
             feed.liveData.decisions;
+
+        const homeRuns =
+            renderHomeRuns(
+                feed.liveData.plays.allPlays
+            );
 
 
         if (decisions) {
