@@ -43,12 +43,14 @@ async function loadFeaturedGame(teamId, containerId) {
             return;
         }
 
-
+        /*
         console.log(
+        
             "Featured game loaded:",
             teamId,
             featuredGame.gamePk
         );
+        */
 
 
         const feedResponse = await fetch(
@@ -111,10 +113,12 @@ async function loadFeaturedGame(teamId, containerId) {
                 }
 
 
+                /*
                 console.log(
                     "Play info:",
                     play
                 );
+                */
                 
                 const batter =
                     play.matchup.batter.fullName;
@@ -159,11 +163,13 @@ async function loadFeaturedGame(teamId, containerId) {
                     splits[0].stat;
 
 
+                /*
                 console.log(
                     "Pitcher season stats:",
                     playerId,
                     pitching
                 );
+                */
 
 
                 let record = "";
