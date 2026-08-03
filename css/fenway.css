@@ -1,147 +1,277 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap');
 
-:root{
-    --green:#18452A;
-    --cream:#F4E7B2;
-    --gold:#FFE27A;
+:root {
+    --green: #123524;
+    --cream: #F3EBD3;
+    --gold: #FFE27A;
+    --line: rgba(243, 235, 211, 0.22);
+    --muted: rgba(243, 235, 211, 0.65);
 }
 
-*{
-    box-sizing:border-box;
+
+/* Base */
+
+* {
+    box-sizing: border-box;
 }
+
 
 html,
-body{
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-    background:var(--green);
-    color:var(--cream);
-    font-family:"Oswald",sans-serif;
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+
+    background: var(--green);
+    color: var(--cream);
+
+    font-family: "Oswald", sans-serif;
 }
 
-.scoreboard{
-    width:100%;
-    height:100%;
-    padding:28px 34px;
+
+/* Scoreboard container */
+
+.scoreboard {
+
+    width: 100%;
+    min-height: 100vh;
+
+    padding: 28px 34px;
+
 }
 
-header{
-    text-align:center;
-    margin-bottom:28px;
+
+/* Header */
+
+header {
+
+    text-align: center;
+    margin-bottom: 28px;
+
 }
 
-h1{
-    margin:0;
-    font-size:42px;
-    font-weight:400;
-    letter-spacing:4px;
+
+h1 {
+
+    margin: 0;
+
+    font-size: 42px;
+    font-weight: 500;
+
+    letter-spacing: 6px;
+
+    text-transform: uppercase;
+
 }
 
-#score-date{
-    margin-top:6px;
-    font-size:20px;
-    letter-spacing:6px;
-    opacity:.8;
+
+#score-date {
+
+    margin-top: 8px;
+
+    font-size: 18px;
+
+    letter-spacing: 5px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+
 }
 
-#games{
 
-    display:grid;
+/* Main 4-column layout */
 
-    grid-template-columns:
-        repeat(4,1fr);
+#games {
 
-    column-gap:42px;
-    row-gap:26px;
+    display: grid;
 
-    align-items:start;
+    grid-template-columns: repeat(4, 1fr);
+
+    column-gap: 42px;
+    row-gap: 28px;
+
+    align-items: start;
+
 }
 
-.game{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
 
-.team-row{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    font-size:34px;
-    line-height:1;
-}
-
-.team{
-
-    letter-spacing:2px;
-}
-
-.score{
-
-    font-size:40px;
-    font-weight:500;
-
-    min-width:34px;
-    text-align:right;
-}
-
-.redsox{
-    color:var(--gold);
-}
-
-@media (max-width:1400px){
-
-    h1{
-        font-size:34px;
-    }
-
-    #score-date{
-        font-size:18px;
-    }
-
-    .team-row{
-        font-size:28px;
-    }
-
-    .score{
-        font-size:34px;
-    }
-
-}    margin: 8px 0 35px 0;
-}
+/* Individual game */
 
 .game {
+
     display: grid;
-    grid-template-columns: 90px 50px 40px 90px 50px;
+
+    grid-template-columns: 1fr 55px;
+
     align-items: center;
 
-    font-size: 36px;
-    letter-spacing: 2px;
+    padding: 8px 0;
 
-    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
 
-    border-bottom: 1px solid rgba(244,231,178,.12);
 }
+
+
+/* Team row */
+
+.team-row {
+
+    display: contents;
+
+}
+
+
+/* Team abbreviation */
 
 .team {
-    text-align: left;
+
+    font-size: 30px;
+
+    font-weight: 400;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
 }
+
+
+/* Score */
 
 .score {
+
+    font-size: 38px;
+
+    font-weight: 600;
+
     text-align: right;
+
+    letter-spacing: 1px;
+
+    font-variant-numeric: tabular-nums;
+
 }
+
+
+/* Game status */
 
 .final {
+
+    font-size: 15px;
+
+    letter-spacing: 2px;
+
+    color: var(--muted);
+
     text-align: center;
-    font-size: 18px;
-    opacity: .55;
+
+    margin-left: 8px;
+
 }
 
+
+/* Red Sox highlight */
+
 .redsox {
-    color: #ffe27a;
+
+    color: var(--gold);
+
     font-weight: 500;
+
+}
+
+
+/* Division / league headers */
+
+.league-header {
+
+    margin-bottom: 12px;
+
+    padding-bottom: 8px;
+
+    border-bottom: 2px solid var(--cream);
+
+    font-size: 24px;
+
+    font-weight: 500;
+
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* Responsive */
+
+@media (max-width: 1400px) {
+
+
+    h1 {
+
+        font-size: 34px;
+
+    }
+
+
+    #games {
+
+        column-gap: 28px;
+
+    }
+
+
+    .team {
+
+        font-size: 26px;
+
+    }
+
+
+    .score {
+
+        font-size: 34px;
+
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+
+    #games {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+
+    .scoreboard {
+
+        padding: 20px;
+
+    }
+
+
+    #games {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    h1 {
+
+        font-size: 30px;
+
+    }
+
 }
