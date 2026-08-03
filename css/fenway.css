@@ -81,7 +81,7 @@ h1 {
 }
 
 
-/* Main 4-column layout */
+/* Main 4-column Fenway layout */
 
 #games {
 
@@ -90,9 +90,64 @@ h1 {
     grid-template-columns: repeat(4, 1fr);
 
     column-gap: 42px;
-    row-gap: 28px;
 
     align-items: start;
+
+}
+
+
+/* League wrapper */
+
+.league-group {
+
+    display: contents;
+
+}
+
+
+/* League title */
+
+.league-header {
+
+    grid-column: span 2;
+
+    margin-bottom: 12px;
+
+    padding-bottom: 8px;
+
+    border-bottom: 2px solid var(--cream);
+
+    font-size: 24px;
+
+    font-weight: 500;
+
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* Two scoreboard columns within each league */
+
+.league-games {
+
+    grid-column: span 2;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    column-gap: 42px;
+
+}
+
+
+.game-column {
+
+    display: flex;
+
+    flex-direction: column;
 
 }
 
@@ -107,14 +162,14 @@ h1 {
 
     align-items: center;
 
-    padding: 8px 0;
+    padding: 12px 0;
 
     border-bottom: 1px solid var(--line);
 
 }
 
 
-/* Team row */
+/* Team rows */
 
 .team-row {
 
@@ -172,42 +227,9 @@ h1 {
 }
 
 
-/* Red Sox highlight */
-
-.redsox {
-
-    color: var(--gold);
-
-    font-weight: 500;
-
-}
-
-
-/* Division / league headers */
-
-.league-header {
-
-    margin-bottom: 12px;
-
-    padding-bottom: 8px;
-
-    border-bottom: 2px solid var(--cream);
-
-    font-size: 24px;
-
-    font-weight: 500;
-
-    letter-spacing: 5px;
-
-    text-transform: uppercase;
-
-}
-
-
 /* Responsive */
 
 @media (max-width: 1400px) {
-
 
     h1 {
 
@@ -217,6 +239,13 @@ h1 {
 
 
     #games {
+
+        column-gap: 28px;
+
+    }
+
+
+    .league-games {
 
         column-gap: 28px;
 
@@ -241,10 +270,17 @@ h1 {
 
 @media (max-width: 900px) {
 
-
     #games {
 
         grid-template-columns: repeat(2, 1fr);
+
+    }
+
+
+    .league-header,
+    .league-games {
+
+        grid-column: span 2;
 
     }
 
@@ -252,7 +288,6 @@ h1 {
 
 
 @media (max-width: 600px) {
-
 
     .scoreboard {
 
@@ -262,6 +297,21 @@ h1 {
 
 
     #games {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .league-header,
+    .league-games {
+
+        grid-column: span 1;
+
+    }
+
+
+    .league-games {
 
         grid-template-columns: 1fr;
 
