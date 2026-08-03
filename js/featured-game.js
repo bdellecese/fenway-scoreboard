@@ -120,8 +120,11 @@ async function loadFeaturedGame(teamId, containerId) {
                 );
                 */
                 
-                const batter =
-                    play.matchup.batter.fullName;
+                const fullName = play.matchup.batter.fullName;
+                
+                const lastName = fullName
+                    .split(" ")
+                    .slice(-1)[0];
 
                 const description =
                     play.result.description;
@@ -131,7 +134,7 @@ async function loadFeaturedGame(teamId, containerId) {
                     match ? match[1] : "?";
 
                 homers.push(
-                    `${batter} (${total})`
+                    `${lastName} (${total})`
                 );
             });
             
