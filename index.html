@@ -1,17 +1,29 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Fenway Scoreboard</title> 
-    <link rel="stylesheet" href="css/fenway.css">
-  </head>
+<html lang="en">
 
-  <body> 
-    <div class="header">
-      <h1>MAJOR LEAGUE BASEBALL</h1>
-      <h2 id="score-date"></h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenway Scoreboard</title>
+
+    <link rel="stylesheet" href="css/fenway.css">
+</head>
+
+<body>
+
+    <div class="scoreboard">
+
+        <header>
+            <h1>MAJOR LEAGUE BASEBALL</h1>
+            <div id="score-date"></div>
+        </header>
+
+        <main id="games"></main>
+
     </div>
-    <div id="games"></div>
-    <script src="js/scoreboard.js"></script> 
-  </body>
+
+    <script src="js/scoreboard.js"></script>
+
+</body>
+
 </html>
