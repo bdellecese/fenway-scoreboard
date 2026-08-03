@@ -12,23 +12,15 @@ async function loadRedSoxGame() {
 
     try {
 
-        const response = await fetch(
+        const scheduleResponse = await fetch(
             `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${apiDate}`
         );
 
 
-        const data = await response.json();
+        const scheduleData = await scheduleResponse.json();
 
 
-        if (!data.dates.length) {
-
-            console.log("No games found.");
-            return;
-
-        }
-
-
-        const games = data.dates[0].games;
+        const games = scheduleData.dates[0].games;
 
 
         const redSoxGame = games.find(game =>
@@ -39,18 +31,35 @@ async function loadRedSoxGame() {
 
         if (!redSoxGame) {
 
-            console.log("No Red Sox game yesterday.");
+            console.log("No Red Sox game.");
             return;
 
         }
 
 
-        console.log("Red Sox game found:");
-        console.log(redSoxGame);
+        console.log("Red Sox game found:", redSoxGame.gamePk);
 
 
-        console.log("Game PK:");
-        console.log(redSoxGame.gamePk);
+
+        const feedResponse = await fetch(
+            `https://statsapi.mlb.com/api/v1.1/game/${redSoxGame.gamePk}/feed/live`
+        );
+
+
+        const feed = await feedResponse.json();
+
+
+        console.log("LIVE FEED:");
+        console.log(feed);
+
+
+        console.log("LINESCORE:");
+        console.log(feed.liveData.linescore);
+
+
+        console.log("DECISIONS:");
+        console.log(feed.liveData.decisions);
+
 
 
     } catch (err) {
