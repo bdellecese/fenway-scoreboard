@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&display=swap');
 
+/*    --green:#18452A; */
 :root{
-    --green:#18452A;
+    --green:#53786C;
     --cream:#F4E7B2;
     --gold:#FFE27A;
 }
