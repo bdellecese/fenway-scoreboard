@@ -103,42 +103,75 @@ async function loadFeaturedGame(teamId, containerId) {
 
         }
 
+        function getDisplayName(fullName) {
+    
+            const parts = fullName.trim().split(/\s+/);
+    
+            const suffixes = new Set([
+                "JR",
+                "JR.",
+                "SR",
+                "SR.",
+                "II",
+                "III",
+                "IV",
+                "V"
+            ]);
+
+            const last = parts[parts.length - 1].toUpperCase();
+
+            if (suffixes.has(last) && parts.length >= 2) {        
+                return `${parts[parts.length - 2]} ${parts[parts.length - 1]}`;
+    
+            }
+
+            return parts[parts.length - 1];
+        }
+
         function renderHomeRuns(allPlays) {
-            const homers = [];
 
+            const homeRuns = new Map();
+            
             allPlays.forEach(play => {
-
                 if (play.result.event !== "Home Run") {
                     return;
                 }
-
-
-                /*
-                console.log(
-                    "Play info:",
-                    play
-                );
-                */
                 
-                const fullName = play.matchup.batter.fullName;
+                const batter = play.matchup.batter;
+                const playerId = batter.id;
+                const displayName = getDisplayName(batter.fullName);
                 
-                const lastName = fullName
-                    .split(" ")
-                    .slice(-1)[0];
-
-                const description =
-                    play.result.description;
-                const match =
-                    description.match(/\((\d+)\)/);
-                const total =
-                    match ? match[1] : "?";
-
-                homers.push(
-                    `${lastName} (${total})`
-                );
+                const match = play.result.description.match(/\((\d+)\)/);
+                const seasonTotal = match ? parseInt(match[1], 10) : null;        
+                    
+                        
+                if (!homeRuns.has(playerId)) {
+                    homeRuns.set(playerId, {
+                        displayName,
+                        gameTotal: 0,
+                        seasonTotal
+                    });
+                }
+                    
+                    
+                const player = homeRuns.get(playerId);
+                    
+                player.gameTotal++;
+                    
+                player.seasonTotal = seasonTotal;
+                
             });
-            
-            return homers;
+                
+            return Array.from(homeRuns.values()).map(player => {
+                
+                const total = player.seasonTotal ?? "?";
+                    
+                if (player.gameTotal === 1) {
+                    return `${player.displayName} (${total})`;
+                }
+                    
+                return `${player.displayName} ${player.gameTotal} (${total})`;
+            });
         }
 
         async function getPitcherRecord(playerId) {
