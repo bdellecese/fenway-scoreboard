@@ -361,7 +361,7 @@ h1 {
 
     grid-template-columns:
         60px
-        repeat(9, 1fr)
+        repeat(10, 1fr)
         55px
         55px
         55px;

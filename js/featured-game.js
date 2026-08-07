@@ -76,31 +76,46 @@ async function loadFeaturedGame(teamId, containerId) {
             TEAM_ABBR[homeTeam.id] || homeTeam.abbreviation;
 
 
-
         function renderInnings(side) {
 
-            return linescore.innings.map(inning => {
-
-                return `
-                    <span>
-                        ${inning[side]?.runs ?? "-"}
-                    </span>
-                `;
-
-            }).join("");
+            return getDisplayInnings(side)
+                .map(inning =>
+                    `<span>${inning.runs}</span>`
+                )
+                .join("");
 
         }
 
-
-
         function renderTotals(side) {
-
             return `
                 <span>${linescore.teams[side].runs}</span>
                 <span>${linescore.teams[side].hits}</span>
                 <span>${linescore.teams[side].errors}</span>
             `;
+        }
 
+        function getDisplayInnings(side) {
+
+            const innings = linescore.innings;
+            const regulation = innings.filter(inning => inning.num <= 9);
+            const extras = innings.filter(inning => inning.num > 9);
+
+            const display = regulation.map(inning => ({
+                label: inning.num,
+                runs: inning[side]?.runs ?? "-"
+            }));
+
+            if (extras.length > 0) {
+                display.push({
+                    label: "X",
+                    runs: extras.reduce(
+                        (sum, inning) =>
+                            sum + (inning[side]?.runs ?? 0),
+                        0
+                    )
+                });
+            }
+            return display;
         }
 
         function getDisplayName(fullName) {
@@ -317,22 +332,18 @@ async function loadFeaturedGame(teamId, containerId) {
 
 
         container.innerHTML = `
-
             <div class="box-score">
-
-
                 <div class="inning-header">
-
                     <span></span>
+                    ${getDisplayInnings("away")
+                        .map(inning =>
+                            `<span>${inning.label}</span>`
+                        )                    
+                        .join("")}
 
-                    ${linescore.innings.map(inning =>
-                        `<span>${inning.num}</span>`
-                    ).join("")}
-
-                    <span>R</span>
-                    <span>H</span>
-                    <span>E</span>
-
+                        <span>R</span>
+                        <span>H</span>
+                        <span>E</span>
                 </div>
 
 
@@ -368,6 +379,13 @@ async function loadFeaturedGame(teamId, containerId) {
 
 
             <div class="decisions">
+
+            <div class="game-length">
+                ${linescore.innings.length > 9    
+                    ? `Final • ${linescore.innings.length} innings`
+                    : ""
+                }
+            </div>
 
                 ${pitchingLine}
 
